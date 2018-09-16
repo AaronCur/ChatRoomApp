@@ -6,7 +6,9 @@ import MessageList from "./components/MessageList";
 import { tokenUrl, instanceLocator} from './config'
 
 class App extends React.Component {
-
+  state = {
+    messages: []
+  }
   //Triggered after render method
   componentDidMount() {
     //Create a new chatkit instance
@@ -22,8 +24,15 @@ class App extends React.Component {
       currentUser.subscribeToRoom({
         roomId: 15195580,
         hooks: {
+          //Fetches messages from chatkit api
           onNewMessage: message => {
             console.log('message.text: ', message.text);
+            this.setState({
+              //... expands brakcets to fit in current brackets
+              //Would look like [[this.state.messages], message]
+              //Copies previous area adding new message to the end
+              messages: [...this.state.messages, message]
+            })
           }
         }
       })
@@ -31,8 +40,11 @@ class App extends React.Component {
   }
 
   render() {
+    console.log('this.state.,messages:', this.state.messages);
     return (
-      <MessageList/>
+      <MessageList
+        messages = {this.state.messages}
+      />
     );
   }
 }
