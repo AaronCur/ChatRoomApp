@@ -28,6 +28,7 @@ class App extends React.Component {
     //Then returns promise
     chatManager.connect().then (currentUser => {
       this.currentUser = currentUser
+      //Add code here to display users online
       this.getRooms()
 
     })
@@ -91,7 +92,7 @@ createRoom = (name) => {
     console.log('this.state.,messages:', this.state.messages);
     return (
       ///... is the spread operator
-      <div>
+      <div className="app">
         <RoomList
           roomId = {this.state.roomId}
           rooms ={[...this.state.joinableRooms, ...this.state.joinedRooms]}
