@@ -84,6 +84,7 @@ sendMessage =(text) => {
       ///... is the spread operator
       <div>
         <RoomList
+          roomId = {this.state.roomId}
           rooms ={[...this.state.joinableRooms, ...this.state.joinedRooms]}
           subscribeToRoom = {this.subscribeToRoom}
         />
