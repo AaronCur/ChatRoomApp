@@ -5,6 +5,7 @@ import './App.css';
 import MessageList from "./components/MessageList";
 import SendMessageForm from "./components/SendMessageForm";
 import RoomList from "./components/RoomList";
+import NewRoomForm from "./components/NewRoomForm";
 import { tokenUrl, instanceLocator} from './config'
 
 class App extends React.Component {
@@ -78,6 +79,14 @@ sendMessage =(text) => {
     roomId: this.state.roomId
   });
 }
+
+createRoom = (name) => {
+  this.currentUser.createRoom({
+    name
+  })
+  .then(room => this.subscribeToRoom(room.id))
+  .catch(err => console.lof('error with createRoom', err))
+}
   render() {
     console.log('this.state.,messages:', this.state.messages);
     return (
@@ -89,11 +98,14 @@ sendMessage =(text) => {
           subscribeToRoom = {this.subscribeToRoom}
         />
         <MessageList
+          roomId = {this.state.roomId}
           messages = {this.state.messages}
         />
         <SendMessageForm
+          disabled={!this.state.roomId}
           sendMessage = {this.sendMessage}
         />
+        <NewRoomForm createRoom ={this.createRoom}/>
       </div>
 
 
