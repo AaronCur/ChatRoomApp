@@ -22,7 +22,8 @@ class App extends React.Component {
     })
     //Then returns promise
     chatManager.connect().then (currentUser => {
-      currentUser.subscribeToRoom({
+      this.currentUser = currentUser
+      this.currentUser.subscribeToRoom({
         roomId: 15195580,
         hooks: {
           //Fetches messages from chatkit api
@@ -40,13 +41,22 @@ class App extends React.Component {
     })
   }
 
+sendMessage =(text) => {
+  this.currentUser.sendMessage({
+    text,
+    roomId: 15195580
+  });
+}
   render() {
     console.log('this.state.,messages:', this.state.messages);
     return (
       <div>
-        <SendMessageForm/>
+
         <MessageList
           messages = {this.state.messages}
+        />
+        <SendMessageForm
+          sendMessage = {this.sendMessage}
         />
       </div>
 
