@@ -4,11 +4,14 @@ import logo from './logo.svg';
 import './App.css';
 import MessageList from "./components/MessageList";
 import SendMessageForm from "./components/SendMessageForm";
+import RoomList from "./components/RoomList";
 import { tokenUrl, instanceLocator} from './config'
 
 class App extends React.Component {
   state = {
-    messages: []
+    messages: [],
+    joinableRooms: [],
+    joinedRooms: []
   }
   //Triggered after render method
   componentDidMount() {
@@ -23,6 +26,15 @@ class App extends React.Component {
     //Then returns promise
     chatManager.connect().then (currentUser => {
       this.currentUser = currentUser
+
+      this.currentUser.getJoinableRooms().then(joinableRooms => {
+        this.setState({
+          joinableRooms,
+          joinedRooms: this.currentUser.rooms
+        })
+      })
+      .catch(err => console.log('Error on joinableRooms:', err))
+
       this.currentUser.subscribeToRoom({
         roomId: 15195580,
         hooks: {
@@ -39,6 +51,7 @@ class App extends React.Component {
         }
       })
     })
+    .catch(err => console.log('Error on connecting:', err))
   }
 
 sendMessage =(text) => {
@@ -50,8 +63,10 @@ sendMessage =(text) => {
   render() {
     console.log('this.state.,messages:', this.state.messages);
     return (
+      ///... is the spread operator
       <div>
-
+        <RoomList rooms ={[...this.state.joinableRooms, ...this.state.joinedRooms]}
+        />
         <MessageList
           messages = {this.state.messages}
         />
